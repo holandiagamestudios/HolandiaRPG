@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Holandia Sim</title>
+	<style>
+		#console {
+			background-color: black;
+			color: white;
+			height: 150px;
+			overflow: auto;
+			padding: 5px;
+		}
+	</style>
+</head>
+<body>
+	<h1>Prosta gra RPG z ekwipunkiem</h1>
+	<p>Witaj w świecie gry RPG! Twój cel to przetrwać i zdobyć jak najwięcej punktów doświadczenia.</p>
+	<div id="console"></div>
+	<p><label for="input">Akcja:</label> <input type="text" id="input"></p>
+	<p>Twoje punkty doświadczenia: <span id="exp">0</span></p>
+	<p>Twoje punkty życia: <span id="hp">100</span></p>
+	<p>Twój ekwipunek:</p>
+	<ul id="inventory">
+		<li>miecz</li>
+		<li>tarcza</li>
+	</ul>
+  <script>
+  var exp = 0;
+var hp = 100;
+var inventory = ["miecz", "tarcza"];
+
+// funkcja wypisująca komunikat w pseudokonsoli
+function log(text) {
+    var consoleDiv = document.getElementById("console");
+    var p = document.createElement("p");
+    p.innerHTML = text;
+    consoleDiv.appendChild(p);
+    consoleDiv.scrollTop = consoleDiv.scrollHeight;
+}
+
+// funkcja przetwarzająca wprowadzoną akcję
+function processInput() {
+    var input = document.getElementById("input").value;
+    log(">" + input);
+    var args = input.split(" ");
+    var command = args[0];
+    var item = args[1];
+    switch (command) {
+        case "eksploruj":
+            explore();
+            break;
+        case "odpocznij":
+            rest();
+            break;
+        case "walcz":
+            fight();
+            break;
+        case "uzycie":
+            useItem(item);
+            break;
+        default:
+            log("Nieznana akcja.");
+            break;
+    }
+    document.getElementById("input").value = "";
+}
+
+// funkcja eksploracji
+function explore() {
+    // losowanie szansy na znalezienie skarbu
+    var chance = Math.random();
+    if (chance < 0.5) {
+        // znaleziono skarb!
+        exp += 10;
+        log("Znalazłeś skarb i zdobyłeś 10 punktów doświadczenia!");
+    } else {
+        // nic nie znaleziono
+        log("Nic nie znalazłeś.");
+    }
+    // aktualizacja wyświetlania punktów doświadczenia
+    document.getElementById("exp").innerHTML = exp;
+}
+
+// funkcja odpoczynku
+function rest() {
+    hp += 10;
+    log("Odpocząłeś i odnowiłeś 10 punktów życia.");
+// aktualizacja wyświetlania punktów życia
+document.getElementById("hp").innerHTML = hp;
+}
+
+// funkcja walki
+function fight() {
+// losowanie szansy na zwycięstwo
+var chance = Math.random();
+if (chance < 0.5) {
+// wygrana
+exp += 5;
+log("Pokonałeś przeciwnika i zdobyłeś 5 punktów doświadczenia!");
+} else {
+// przegrana
+hp -= 10;
+log("Przeciwnik okazał się za silny i straciłeś 10 punktów życia!");
+}
+// aktualizacja wyświetlania punktów doświadczenia i życia
+document.getElementById("exp").innerHTML = exp;
+document.getElementById("hp").innerHTML = hp;
+}
+
+// funkcja użycia przedmiotu z ekwipunku
+function useItem(item) {
+if (inventory.includes(item)) {
+// przedmiot jest w ekwipunku
+switch (item) {
+case "miecz":
+log("Użyłeś miecza i zadajesz dodatkowe obrażenia w walce!");
+break;
+case "tarcza":
+log("Użyłeś tarczy i unosisz większą część ataków przeciwników!");
+break;
+}
+} else {
+// przedmiot nie jest w ekwipunku
+log("Nie masz takiego przedmiotu w ekwipunku.");
+}
+}
+
+// obsługa formularza z akcjami gracza
+var form = document.querySelector("form");
+form.addEventListener("submit", function(e) {
+e.preventDefault();
+processInput();
+});
+
+// wyświetlenie początkowej zawartości ekwipunku
+var inventoryList = document.getElementById("inventory");
+for (var i = 0; i < inventory.length; i++) {
+var li = document.createElement("li");
+li.innerHTML = inventory[i];
+inventoryList.appendChild(li);
+}
+  </script>
+  
+  
+</body>
+</html>
